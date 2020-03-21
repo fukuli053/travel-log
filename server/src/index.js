@@ -1,15 +1,17 @@
 const express = require('express');
-const morgan = require('morgan'); //    is a loger
-const helmet = require('helmet'); //    is adding and deleting some headers for security.
+const morgan = require('morgan');
+const helmet = require('helmet');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
 require('dotenv').config();
 
-const middlewares = require('./middelwares');
+const middlewares = require('./middlewares');
 const logs = require('./api/logs');
 
 const app = express();
+
+app.enable('trust proxy'); // needed for rate limiting by Client IP
 
 mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
@@ -25,7 +27,7 @@ app.use(express.json());
 
 app.get('/', (req, res) => {
   res.json({
-    message: 'Hello World !',
+    message: 'Hello World!',
   });
 });
 
